@@ -1,0 +1,844 @@
+/* =========================================================
+   HOME PAGE
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.home-page {
+    width: 100%;
+    min-height: 100vh;
+    background: #080808;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    width: 100%;
+    height: 75px;
+
+    background: #080808;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    position: relative;
+    z-index: 10;
+
+    border-bottom: 1px solid #222;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo,
+.footer-logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: white;
+}
+
+.logo span,
+.footer-logo span {
+    color: #ff6b00;
+}
+
+
+/* =========================================================
+   NAV LINKS
+   ========================================================= */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links .active {
+    color: #ff6b00;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-btn {
+    border: 1px solid #ff6b00;
+
+    padding: 9px 20px;
+
+    border-radius: 4px;
+}
+
+.login-btn:hover {
+    background: #ff6b00;
+    color: white !important;
+}
+
+
+/* =========================================================
+   REGISTER BUTTON
+   ========================================================= */
+
+.register-btn {
+    background: #ff6b00;
+
+    padding: 10px 21px;
+
+    border-radius: 4px;
+}
+
+.register-btn:hover {
+    background: #e85d00;
+    color: white !important;
+}
+
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+
+.hero {
+    width: 100%;
+    height: 650px;
+
+    position: relative;
+
+    /* YOUR IMAGE */
+    background-image: url("/gym.jpg");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   DARK OVERLAY
+   ========================================================= */
+
+.hero-overlay {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.95),
+            rgba(0, 0, 0, 0.65),
+            rgba(0, 0, 0, 0.35)
+        );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+
+    width: 55%;
+
+    margin-left: 8%;
+}
+
+
+.hero-small {
+    color: #ff6b00;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 15px;
+}
+
+
+.hero-content h1 {
+    font-size: 65px;
+
+    line-height: 1.05;
+
+    font-weight: 900;
+
+    margin-bottom: 20px;
+}
+
+.hero-content h1 span {
+    color: #ff6b00;
+
+    display: block;
+}
+
+
+.hero-text {
+    width: 600px;
+
+    max-width: 100%;
+
+    color: #d1d1d1;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+   ========================================================= */
+
+.hero-buttons {
+    display: flex;
+
+    gap: 15px;
+}
+
+
+.primary-btn,
+.secondary-btn {
+    display: inline-block;
+
+    padding: 13px 28px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    border-radius: 4px;
+
+    transition: 0.3s;
+}
+
+
+.primary-btn {
+    background: #ff6b00;
+
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #e85d00;
+
+    transform: translateY(-2px);
+}
+
+
+.secondary-btn {
+    border: 1px solid #ff6b00;
+
+    color: white;
+}
+
+.secondary-btn:hover {
+    background: #ff6b00;
+}
+
+
+/* =========================================================
+   WHY CHOOSE US
+   ========================================================= */
+
+.why-section {
+    width: 100%;
+
+    padding: 80px 7%;
+
+    background: #0d0d0d;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.section-title {
+    text-align: center;
+
+    margin-bottom: 50px;
+}
+
+.section-title p {
+    color: #ff6b00;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 10px;
+}
+
+.section-title h2 {
+    font-size: 35px;
+
+    font-weight: 900;
+}
+
+.section-title h2 span {
+    color: #ff6b00;
+}
+
+
+/* =========================================================
+   WHY CARDS
+   ========================================================= */
+
+.why-cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+
+    max-width: 1150px;
+
+    margin: auto;
+}
+
+
+.why-card {
+    background: #151515;
+
+    border: 1px solid #252525;
+
+    padding: 35px 25px;
+
+    text-align: center;
+
+    border-radius: 6px;
+
+    transition: 0.3s;
+}
+
+
+.why-card:hover {
+    border-color: #ff6b00;
+
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 10px 30px
+        rgba(255, 107, 0, 0.12);
+}
+
+
+.card-icon {
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    background: #21160f;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+
+.why-card h3 {
+    font-size: 20px;
+
+    margin-bottom: 12px;
+}
+
+
+.why-card p {
+    color: #aaa;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FEATURE STRIP
+   ========================================================= */
+
+.features {
+    width: 100%;
+
+    padding: 35px 7%;
+
+    background: #ff6b00;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 25px;
+}
+
+
+.feature {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    border-right: 1px solid
+        rgba(255, 255, 255, 0.3);
+
+    padding-right: 15px;
+}
+
+
+.feature:last-child {
+    border-right: none;
+}
+
+
+.feature-icon {
+    font-size: 32px;
+}
+
+
+.feature h3 {
+    font-size: 15px;
+
+    margin-bottom: 5px;
+}
+
+
+.feature p {
+    font-size: 12px;
+
+    color: #fff0e5;
+}
+
+
+/* =========================================================
+   CTA SECTION
+   ========================================================= */
+
+.cta-section {
+    width: 100%;
+
+    padding: 90px 20px;
+
+    /* SAME GYM IMAGE */
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.88),
+            rgba(0, 0, 0, 0.88)
+        ),
+        url("/gym.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    text-align: center;
+}
+
+
+.cta-content {
+    max-width: 750px;
+
+    margin: auto;
+}
+
+
+.cta-content > p:first-child {
+    color: #ff6b00;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    font-size: 14px;
+
+    margin-bottom: 12px;
+}
+
+
+.cta-content h2 {
+    font-size: 42px;
+
+    margin-bottom: 15px;
+}
+
+
+.cta-content h2 span {
+    color: #ff6b00;
+}
+
+
+.cta-content p {
+    color: #aaa;
+
+    line-height: 1.7;
+
+    margin-bottom: 25px;
+}
+
+
+.cta-btn {
+    display: inline-block;
+
+    background: #ff6b00;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 13px 30px;
+
+    font-weight: bold;
+
+    border-radius: 4px;
+
+    transition: 0.3s;
+}
+
+
+.cta-btn:hover {
+    background: #e85d00;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    background: #050505;
+
+    padding-top: 55px;
+}
+
+
+.footer-content {
+    width: 86%;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr 1.5fr;
+
+    gap: 50px;
+
+    padding-bottom: 45px;
+}
+
+
+.footer-about p {
+    color: #888;
+
+    line-height: 1.7;
+
+    font-size: 14px;
+
+    margin-top: 18px;
+
+    max-width: 320px;
+}
+
+
+.footer-links,
+.footer-contact {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.footer h3 {
+    font-size: 17px;
+
+    margin-bottom: 8px;
+
+    color: white;
+}
+
+
+.footer-links a {
+    color: #888;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: 0.3s;
+}
+
+
+.footer-links a:hover {
+    color: #ff6b00;
+}
+
+
+.footer-contact p {
+    color: #888;
+
+    font-size: 14px;
+}
+
+
+.footer-bottom {
+    border-top: 1px solid #1e1e1e;
+
+    padding: 20px;
+
+    text-align: center;
+}
+
+
+.footer-bottom p {
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+
+    .hero-content {
+        width: 70%;
+
+        margin-left: 6%;
+    }
+
+    .hero-content h1 {
+        font-size: 50px;
+    }
+
+    .why-cards {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .features {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .feature:nth-child(2) {
+        border-right: none;
+    }
+
+    .footer-content {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        height: auto;
+
+        padding: 18px 5%;
+
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 12px;
+    }
+
+    .hero {
+        height: 570px;
+
+        background-position: center;
+    }
+
+    .hero-content {
+        width: 90%;
+
+        margin-left: 5%;
+    }
+
+    .hero-content h1 {
+        font-size: 42px;
+    }
+
+    .hero-text {
+        font-size: 15px;
+    }
+
+    .why-section {
+        padding: 60px 5%;
+    }
+
+    .section-title h2 {
+        font-size: 28px;
+    }
+
+    .why-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+
+        padding: 30px 8%;
+    }
+
+    .feature {
+        border-right: none;
+
+        border-bottom: 1px solid
+            rgba(255, 255, 255, 0.3);
+
+        padding-bottom: 20px;
+    }
+
+    .feature:last-child {
+        border-bottom: none;
+    }
+
+    .cta-content h2 {
+        font-size: 32px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .nav-links {
+        gap: 8px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    .login-btn,
+    .register-btn {
+        padding: 8px 12px;
+    }
+
+    .hero-content h1 {
+        font-size: 35px;
+    }
+
+    .hero-small {
+        font-size: 12px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+
+        width: 180px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        text-align: center;
+    }
+
+    .section-title h2 {
+        font-size: 24px;
+    }
+
+    .cta-content h2 {
+        font-size: 27px;
+    }
+}
