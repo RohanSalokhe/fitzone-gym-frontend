@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./payment.css";
 
-const API_URL = "http://localhost:5005";
+const API_URL = "https://fitzone-gym-backend.onrender.com";
 
 function Payment() {
     const [payments, setPayments] = useState([]);
