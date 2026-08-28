@@ -11,6 +11,7 @@ import Register from "./components/register";
 import Login from "./components/login";
 
 import PublicPlans from "./components/PublicPlans";
+import MemberDashboard from "./components/MemberDashboard";
 
 import DashboardLayout from "./components/dashboardLayout";
 import Dashboard from "./components/dashboard";
@@ -21,6 +22,7 @@ import Contact from "./components/contact";
 import Payment from "./components/payment";
 import Reports from "./components/reports";
 import Settings from "./components/settings";
+
 
 function App() {
 
@@ -71,6 +73,16 @@ function App() {
 
 
         {/* =========================
+            MEMBER DASHBOARD
+        ========================= */}
+
+        <Route
+          path="/memberdashboard"
+          element={<MemberDashboard />}
+        />
+
+
+        {/* =========================
             ADMIN DASHBOARD
         ========================= */}
 
@@ -79,40 +91,63 @@ function App() {
           element={<DashboardLayout />}
         >
 
+          {/* Dashboard */}
+
           <Route
             index
             element={<Dashboard />}
           />
+
+
+          {/* Members */}
 
           <Route
             path="members"
             element={<Member />}
           />
 
+
+          {/* Membership Plans */}
+
           <Route
             path="plans"
             element={<Plans />}
           />
+
+
+          {/* Trainers */}
 
           <Route
             path="trainers"
             element={<Trainer />}
           />
 
+
+          {/* Payments */}
+
           <Route
             path="payments"
             element={<Payment />}
           />
+
+
+          {/* Reports */}
 
           <Route
             path="reports"
             element={<Reports />}
           />
 
+
+          {/* Settings */}
+
           <Route
             path="settings"
             element={<Settings />}
           />
+
+
+          {/* Contact */}
 
           <Route
             path="contact"
@@ -121,11 +156,14 @@ function App() {
 
         </Route>
 
+
       </Routes>
 
     </BrowserRouter>
 
   );
+
 }
+
 
 export default App;
