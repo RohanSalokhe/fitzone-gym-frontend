@@ -1,23 +1,42 @@
+/* =====================================================
+   FITZONE GYM MANAGEMENT SYSTEM
+   LOGIN PAGE CSS
+   ===================================================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #080808;
+}
+
 .login-page {
   min-height: 100vh;
   background: #080808;
   color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 
-/* =========================
+/* =====================================================
    HEADER
-========================= */
+   ===================================================== */
 
 .login-header {
+  width: 100%;
   height: 80px;
+
   background: #0d0d0d;
   border-bottom: 1px solid #222;
 
@@ -26,7 +45,15 @@
   justify-content: space-between;
 
   padding: 0 7%;
+
+  position: relative;
+  z-index: 10;
 }
+
+
+/* =====================================================
+   LOGO
+   ===================================================== */
 
 .login-logo {
   display: flex;
@@ -46,6 +73,8 @@
   justify-content: center;
 
   font-size: 23px;
+
+  box-shadow: 0 5px 20px rgba(255, 107, 0, 0.15);
 }
 
 .login-logo h2 {
@@ -59,15 +88,28 @@
 }
 
 .login-logo small {
+  display: block;
+
   color: #888;
   font-size: 10px;
   letter-spacing: 4px;
+
+  margin-top: 5px;
 }
+
+
+/* =====================================================
+   BACK HOME
+   ===================================================== */
 
 .login-back-home {
   color: #ffffff;
   text-decoration: none;
+
   font-size: 15px;
+
+  padding: 8px 0;
+
   transition: 0.3s;
 }
 
@@ -76,11 +118,13 @@
 }
 
 
-/* =========================
+/* =====================================================
    LOGIN SECTION
-========================= */
+   ===================================================== */
 
 .login-section {
+  flex: 1;
+
   min-height: calc(100vh - 140px);
 
   padding: 70px 7%;
@@ -92,28 +136,39 @@
   background:
     radial-gradient(
       circle at 90% 20%,
-      rgba(255, 107, 0, 0.08),
+      rgba(255, 107, 0, 0.09),
       transparent 30%
+    ),
+    radial-gradient(
+      circle at 10% 80%,
+      rgba(255, 107, 0, 0.04),
+      transparent 25%
     ),
     #080808;
 }
 
+
+/* =====================================================
+   MAIN CONTAINER
+   ===================================================== */
+
 .login-container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1150px;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
 
-  gap: 80px;
+  grid-template-columns: 1fr 460px;
+
+  gap: 75px;
 
   align-items: center;
 }
 
 
-/* =========================
+/* =====================================================
    LEFT SIDE
-========================= */
+   ===================================================== */
 
 .login-info {
   padding: 20px;
@@ -132,11 +187,14 @@
 
 .login-info h1 {
   font-size: 55px;
+
   line-height: 1.05;
 
   font-weight: 800;
 
   margin-bottom: 20px;
+
+  letter-spacing: -1px;
 }
 
 .login-info h1 span {
@@ -148,18 +206,21 @@
 
   line-height: 1.7;
 
-  max-width: 460px;
+  max-width: 480px;
 
   margin-bottom: 40px;
+
+  font-size: 15px;
 }
 
 
-/* =========================
+/* =====================================================
    BENEFITS
-========================= */
+   ===================================================== */
 
 .login-benefits {
   display: flex;
+
   flex-direction: column;
 
   gap: 22px;
@@ -167,14 +228,23 @@
 
 .login-benefit {
   display: flex;
+
   align-items: center;
 
   gap: 18px;
+
+  transition: 0.3s;
+}
+
+.login-benefit:hover {
+  transform: translateX(5px);
 }
 
 .login-benefit > span {
   width: 55px;
   height: 55px;
+
+  flex-shrink: 0;
 
   background: rgba(255, 107, 0, 0.12);
 
@@ -183,7 +253,9 @@
   border-radius: 12px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   font-size: 25px;
@@ -193,20 +265,26 @@
   font-size: 17px;
 
   margin-bottom: 5px;
+
+  color: #ffffff;
 }
 
 .login-benefit p {
   color: #888;
 
   font-size: 13px;
+
+  line-height: 1.5;
 }
 
 
-/* =========================
+/* =====================================================
    LOGIN CARD
-========================= */
+   ===================================================== */
 
 .login-card {
+  width: 100%;
+
   background: #111111;
 
   border: 1px solid #272727;
@@ -217,7 +295,33 @@
 
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.5);
+
+  position: relative;
+
+  overflow: hidden;
 }
+
+
+/* Orange top line */
+
+.login-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background: #ff6b00;
+}
+
+
+/* =====================================================
+   LOGIN HEADING
+   ===================================================== */
 
 .login-heading {
   margin-bottom: 30px;
@@ -227,18 +331,22 @@
   font-size: 30px;
 
   margin-bottom: 8px;
+
+  color: #ffffff;
 }
 
 .login-heading p {
   color: #888;
 
   font-size: 14px;
+
+  line-height: 1.5;
 }
 
 
-/* =========================
+/* =====================================================
    FORM
-========================= */
+   ===================================================== */
 
 .login-form-group {
   margin-bottom: 22px;
@@ -282,6 +390,10 @@
   color: #666;
 }
 
+.login-form-group input:hover {
+  border-color: #444;
+}
+
 .login-form-group input:focus {
   border-color: #ff6b00;
 
@@ -290,9 +402,9 @@
 }
 
 
-/* =========================
+/* =====================================================
    OPTIONS
-========================= */
+   ===================================================== */
 
 .login-options {
   display: flex;
@@ -302,6 +414,8 @@
   justify-content: space-between;
 
   margin: 5px 0 25px;
+
+  gap: 15px;
 }
 
 .remember {
@@ -319,6 +433,9 @@
 }
 
 .remember input {
+  width: 14px;
+  height: 14px;
+
   accent-color: #ff6b00;
 
   cursor: pointer;
@@ -330,16 +447,20 @@
   text-decoration: none;
 
   font-size: 12px;
+
+  transition: 0.3s;
 }
 
 .forgot-password:hover {
+  color: #ff8533;
+
   text-decoration: underline;
 }
 
 
-/* =========================
+/* =====================================================
    LOGIN BUTTON
-========================= */
+   ===================================================== */
 
 .login-btn {
   width: 100%;
@@ -375,6 +496,8 @@
 
 .login-btn span {
   font-size: 20px;
+
+  line-height: 1;
 }
 
 .login-btn:hover {
@@ -386,10 +509,45 @@
     0 8px 25px rgba(255, 107, 0, 0.25);
 }
 
+.login-btn:active {
+  transform: translateY(0);
+}
 
-/* =========================
+.login-btn:disabled {
+  background: #a84300;
+
+  cursor: not-allowed;
+
+  opacity: 0.7;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+
+/* =====================================================
+   ERROR / SUCCESS MESSAGE
+   ===================================================== */
+
+.login-card form > p {
+  color: #ff6b00 !important;
+
+  background: rgba(255, 107, 0, 0.06);
+
+  border: 1px solid rgba(255, 107, 0, 0.15);
+
+  border-radius: 7px;
+
+  padding: 10px;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
    REGISTER TEXT
-========================= */
+   ===================================================== */
 
 .register-text {
   text-align: center;
@@ -407,16 +565,20 @@
   text-decoration: none;
 
   font-weight: 600;
+
+  transition: 0.3s;
 }
 
 .register-text a:hover {
+  color: #ff8533;
+
   text-decoration: underline;
 }
 
 
-/* =========================
+/* =====================================================
    FOOTER
-========================= */
+   ===================================================== */
 
 .login-footer {
   height: 60px;
@@ -436,47 +598,80 @@
   color: #666;
 
   font-size: 12px;
+
+  text-align: center;
 }
 
 
-/* =========================
+/* =====================================================
    TABLET
-========================= */
+   ===================================================== */
+
+@media (max-width: 1000px) {
+
+  .login-container {
+    grid-template-columns: 1fr 420px;
+
+    gap: 40px;
+  }
+
+  .login-info h1 {
+    font-size: 46px;
+  }
+
+  .login-card {
+    padding: 35px;
+  }
+}
+
+
+/* =====================================================
+   TABLET / SMALL LAPTOP
+   ===================================================== */
 
 @media (max-width: 900px) {
 
   .login-container {
     grid-template-columns: 1fr;
 
-    gap: 40px;
+    gap: 45px;
 
     max-width: 600px;
   }
 
   .login-info {
     text-align: center;
+
+    padding: 10px;
   }
 
   .login-description {
     margin-left: auto;
+
     margin-right: auto;
   }
 
   .login-benefits {
     align-items: flex-start;
 
-    max-width: 400px;
+    max-width: 420px;
 
     margin: auto;
 
     text-align: left;
   }
+
+  .login-card {
+    max-width: 500px;
+
+    margin: auto;
+  }
 }
 
 
-/* =========================
+/* =====================================================
    MOBILE
-========================= */
+   ===================================================== */
 
 @media (max-width: 600px) {
 
@@ -484,6 +679,10 @@
     height: 70px;
 
     padding: 0 5%;
+  }
+
+  .login-logo {
+    gap: 9px;
   }
 
   .login-logo h2 {
@@ -497,6 +696,12 @@
     font-size: 19px;
   }
 
+  .login-logo small {
+    font-size: 8px;
+
+    letter-spacing: 3px;
+  }
+
   .login-back-home {
     font-size: 12px;
   }
@@ -505,20 +710,118 @@
     padding: 40px 5%;
   }
 
+  .login-container {
+    gap: 35px;
+  }
+
+  .login-info {
+    padding: 0;
+  }
+
+  .login-subtitle {
+    font-size: 11px;
+
+    letter-spacing: 2px;
+  }
+
   .login-info h1 {
-    font-size: 40px;
+    font-size: 38px;
+
+    line-height: 1.1;
+  }
+
+  .login-description {
+    font-size: 14px;
+
+    margin-bottom: 30px;
+  }
+
+  .login-benefits {
+    gap: 18px;
+  }
+
+  .login-benefit > span {
+    width: 48px;
+    height: 48px;
+
+    font-size: 21px;
+  }
+
+  .login-benefit h3 {
+    font-size: 15px;
+  }
+
+  .login-benefit p {
+    font-size: 12px;
   }
 
   .login-card {
-    padding: 28px 20px;
+    padding: 30px 20px;
+
+    border-radius: 14px;
+  }
+
+  .login-heading {
+    margin-bottom: 25px;
   }
 
   .login-heading h2 {
     font-size: 25px;
   }
 
+  .login-heading p {
+    font-size: 13px;
+  }
+
   .login-options {
-    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .login-btn {
+    height: 48px;
+  }
+
+  .register-text {
+    font-size: 12px;
+  }
+
+  .login-footer {
+    height: 55px;
+  }
+
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 400px) {
+
+  .login-header {
+    padding: 0 4%;
+  }
+
+  .login-back-home {
+    font-size: 11px;
+  }
+
+  .login-info h1 {
+    font-size: 32px;
+  }
+
+  .login-card {
+    padding: 25px 16px;
+  }
+
+  .login-options {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .forgot-password {
+    align-self: flex-end;
   }
 
 }

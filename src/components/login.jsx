@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 
+// =====================================================
+// FITZONE GYM MANAGEMENT SYSTEM
+// LOGIN PAGE
+// Render Backend API
+// =====================================================
+
+const API_URL = "https://fitzone-gym-backend.onrender.com";
+
 export default function Login() {
 
   const navigate = useNavigate();
@@ -14,15 +22,25 @@ export default function Login() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+
+  // =====================================================
+  // HANDLE INPUT CHANGE
+  // =====================================================
+
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
   };
 
 
-  // ================= LOGIN API =================
+  // =====================================================
+  // HANDLE LOGIN
+  // =====================================================
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -32,51 +50,221 @@ export default function Login() {
 
     try {
 
-      const response = await fetch("https://fitzone-gym-backend.onrender.com/login", {
-        method: "POST",
+      // =================================================
+      // LOGIN API
+      // =================================================
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(
+        `${API_URL}/login`,
+        {
+          method: "POST",
 
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email: formData.email.trim(),
+            password: formData.password,
+          }),
+        }
+      );
 
 
       const data = await response.json();
 
 
-      // ================= LOGIN SUCCESS =================
-      if (response.ok) {
+      console.log("Login Response:", data);
 
-        console.log("Login Response:", data);
 
-        // Admin information save
-        localStorage.setItem("adminId", data.adminId);
-        localStorage.setItem("adminName", data.adminName);
-        localStorage.setItem("adminEmail", data.email);
+      // =================================================
+      // LOGIN FAILED
+      // =================================================
 
-        // Dashboard open
-        navigate("/dashboard");
+      if (!response.ok) {
 
-      } else {
-
-        // Login failed
         setMessage(
-          data.message || "Invalid Email or Password"
+          data.message ||
+          data.error ||
+          "Invalid Email or Password"
         );
 
+        return;
       }
+
+
+      // =================================================
+      // CLEAR OLD LOGIN DATA
+      // =================================================
+
+      localStorage.removeItem("adminId");
+      localStorage.removeItem("adminName");
+      localStorage.removeItem("adminEmail");
+
+      localStorage.removeItem("userId");
+      localStorage.removeItem("memberId");
+      localStorage.removeItem("memberName");
+      localStorage.removeItem("memberEmail");
+      localStorage.removeItem("memberPhone");
+      localStorage.removeItem("memberAge");
+      localStorage.removeItem("memberGender");
+      localStorage.removeItem("memberPlan");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("role");
+
+
+      // =================================================
+      // ADMIN LOGIN
+      // =================================================
+
+      if (
+        data.userType === "admin" ||
+        data.role === "admin"
+      ) {
+
+        // Save admin information
+
+        localStorage.setItem(
+          "userType",
+          "admin"
+        );
+
+        localStorage.setItem(
+          "role",
+          "admin"
+        );
+
+        localStorage.setItem(
+          "adminId",
+          data.adminId
+        );
+
+        localStorage.setItem(
+          "adminName",
+          data.adminName
+        );
+
+        localStorage.setItem(
+          "adminEmail",
+          data.email
+        );
+
+
+        // Success message
+
+        console.log(
+          "Admin Login Successful"
+        );
+
+
+        // Open Admin Dashboard
+
+        navigate("/dashboard");
+
+        return;
+      }
+
+
+      // =================================================
+      // MEMBER LOGIN
+      // =================================================
+
+      if (
+        data.userType === "member" ||
+        data.role === "member"
+      ) {
+
+        // Save member information
+
+        localStorage.setItem(
+          "userType",
+          "member"
+        );
+
+        localStorage.setItem(
+          "role",
+          data.role || "member"
+        );
+
+        localStorage.setItem(
+          "userId",
+          data.userId
+        );
+
+        localStorage.setItem(
+          "memberId",
+          data.memberId
+        );
+
+        localStorage.setItem(
+          "memberName",
+          data.memberName
+        );
+
+        localStorage.setItem(
+          "memberEmail",
+          data.email
+        );
+
+        localStorage.setItem(
+          "memberPhone",
+          data.phone || ""
+        );
+
+        localStorage.setItem(
+          "memberAge",
+          data.age || ""
+        );
+
+        localStorage.setItem(
+          "memberGender",
+          data.gender || ""
+        );
+
+        localStorage.setItem(
+          "memberPlan",
+          data.plan || ""
+        );
+
+
+        // Success message
+
+        console.log(
+          "Member Login Successful"
+        );
+
+
+        // =================================================
+        // OPEN MEMBER DASHBOARD
+        // =================================================
+
+        navigate("/memberdashboard");
+
+        return;
+      }
+
+
+      // =================================================
+      // UNKNOWN USER TYPE
+      // =================================================
+
+      setMessage(
+        "Login successful, but user type was not recognized."
+      );
 
     } catch (error) {
 
-      console.log("Login Error:", error);
+      // =================================================
+      // SERVER CONNECTION ERROR
+      // =================================================
+
+      console.error(
+        "Login Error:",
+        error
+      );
 
       setMessage(
-        "Server connection failed. Please start the backend server."
+        "Server connection failed. Please check your internet connection and try again."
       );
 
     } finally {
@@ -84,13 +272,23 @@ export default function Login() {
       setLoading(false);
 
     }
+
   };
 
 
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
+
     <div className="login-page">
 
-      {/* Header */}
+
+      {/* =================================================
+          HEADER
+      ================================================= */}
+
       <header className="login-header">
 
         <div className="login-logo">
@@ -100,96 +298,166 @@ export default function Login() {
           </div>
 
           <div>
+
             <h2>
               FIT<span>ZONE</span>
             </h2>
 
-            <small>GYM</small>
+            <small>
+              GYM
+            </small>
+
           </div>
 
         </div>
 
 
-        <a href="/" className="login-back-home">
+        <a
+          href="/"
+          className="login-back-home"
+        >
           ← Back to Home
         </a>
 
       </header>
 
 
-      {/* Login Section */}
+
+      {/* =================================================
+          LOGIN SECTION
+      ================================================= */}
+
       <section className="login-section">
 
         <div className="login-container">
 
 
-          {/* Left Side */}
+          {/* =================================================
+              LEFT SIDE
+          ================================================= */}
+
           <div className="login-info">
 
             <p className="login-subtitle">
               WELCOME BACK
             </p>
 
+
             <h1>
+
               GET BACK
+
               <br />
-              <span>INTO ACTION</span>
+
+              <span>
+                INTO ACTION
+              </span>
+
             </h1>
 
+
             <p className="login-description">
+
               Login to your FitZone account and continue your
               fitness journey with us.
+
             </p>
 
 
             <div className="login-benefits">
 
+
+              {/* TRAIN HARD */}
+
               <div className="login-benefit">
 
-                <span>🏋️</span>
+                <span>
+                  🏋️
+                </span>
 
                 <div>
-                  <h3>Train Hard</h3>
-                  <p>Push your limits every day.</p>
+
+                  <h3>
+                    Train Hard
+                  </h3>
+
+                  <p>
+                    Push your limits every day.
+                  </p>
+
                 </div>
 
               </div>
 
 
+
+              {/* REACH GOALS */}
+
               <div className="login-benefit">
 
-                <span>🎯</span>
+                <span>
+                  🎯
+                </span>
 
                 <div>
-                  <h3>Reach Your Goals</h3>
-                  <p>Stay focused on your fitness goals.</p>
+
+                  <h3>
+                    Reach Your Goals
+                  </h3>
+
+                  <p>
+                    Stay focused on your fitness goals.
+                  </p>
+
                 </div>
 
               </div>
 
 
+
+              {/* STAY STRONG */}
+
               <div className="login-benefit">
 
-                <span>💪</span>
+                <span>
+                  💪
+                </span>
 
                 <div>
-                  <h3>Stay Strong</h3>
-                  <p>Build a stronger and healthier lifestyle.</p>
+
+                  <h3>
+                    Stay Strong
+                  </h3>
+
+                  <p>
+                    Build a stronger and healthier lifestyle.
+                  </p>
+
                 </div>
 
               </div>
+
 
             </div>
 
           </div>
 
 
-          {/* Login Card */}
+
+          {/* =================================================
+              LOGIN CARD
+          ================================================= */}
+
           <div className="login-card">
+
+
+            {/* LOGIN HEADING */}
 
             <div className="login-heading">
 
-              <h2>Member Login</h2>
+              <h2>
+                Member Login
+              </h2>
 
               <p>
                 Enter your account details to continue
@@ -198,10 +466,18 @@ export default function Login() {
             </div>
 
 
+
+            {/* =================================================
+                LOGIN FORM
+            ================================================= */}
+
             <form onSubmit={handleSubmit}>
 
 
-              {/* Email */}
+              {/* =================================================
+                  EMAIL
+              ================================================= */}
+
               <div className="login-form-group">
 
                 <label>
@@ -214,13 +490,18 @@ export default function Login() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
+                  autoComplete="email"
                   required
                 />
 
               </div>
 
 
-              {/* Password */}
+
+              {/* =================================================
+                  PASSWORD
+              ================================================= */}
+
               <div className="login-form-group">
 
                 <label>
@@ -234,18 +515,25 @@ export default function Login() {
                   onChange={handleChange}
                   placeholder="Enter your password"
                   minLength="6"
+                  autoComplete="current-password"
                   required
                 />
 
               </div>
 
 
-              {/* Remember + Forgot */}
+
+              {/* =================================================
+                  REMEMBER + FORGOT
+              ================================================= */}
+
               <div className="login-options">
 
                 <label className="remember">
 
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                  />
 
                   <span>
                     Remember me
@@ -253,9 +541,16 @@ export default function Login() {
 
                 </label>
 
+
                 <a
                   href="#"
                   className="forgot-password"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert(
+                      "Please contact FitZone Gym administration to reset your password."
+                    );
+                  }}
                 >
                   Forgot Password?
                 </a>
@@ -263,8 +558,13 @@ export default function Login() {
               </div>
 
 
-              {/* Error / Success Message */}
+
+              {/* =================================================
+                  MESSAGE
+              ================================================= */}
+
               {message && (
+
                 <p
                   style={{
                     color: "#ff6600",
@@ -275,26 +575,43 @@ export default function Login() {
                 >
                   {message}
                 </p>
+
               )}
 
 
-              {/* Login Button */}
+
+              {/* =================================================
+                  LOGIN BUTTON
+              ================================================= */}
+
               <button
                 type="submit"
                 className="login-btn"
                 disabled={loading}
               >
 
-                {loading ? "LOGGING IN..." : "LOGIN"}
+                {loading
+                  ? "LOGGING IN..."
+                  : "LOGIN"
+                }
 
-                {!loading && <span>→</span>}
+                {!loading && (
+                  <span>
+                    →
+                  </span>
+                )}
 
               </button>
+
 
             </form>
 
 
-            {/* Register */}
+
+            {/* =================================================
+                REGISTER LINK
+            ================================================= */}
+
             <p className="register-text">
 
               Don't have an account?
@@ -305,6 +622,7 @@ export default function Login() {
 
             </p>
 
+
           </div>
 
         </div>
@@ -312,7 +630,11 @@ export default function Login() {
       </section>
 
 
-      {/* Footer */}
+
+      {/* =================================================
+          FOOTER
+      ================================================= */}
+
       <footer className="login-footer">
 
         <p>
@@ -321,6 +643,9 @@ export default function Login() {
 
       </footer>
 
+
     </div>
+
   );
+
 }
