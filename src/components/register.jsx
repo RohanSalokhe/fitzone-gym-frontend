@@ -13,7 +13,6 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    memberId: "",
     memberName: "",
     email: "",
     phone: "",
@@ -25,7 +24,6 @@ export default function Register() {
   });
 
   const [loading, setLoading] = useState(false);
-
 
   // =====================================================
   // HANDLE INPUT CHANGE
@@ -39,7 +37,6 @@ export default function Register() {
     });
 
   };
-
 
   // =====================================================
   // HANDLE MEMBER REGISTER
@@ -60,22 +57,21 @@ export default function Register() {
       return;
     }
 
-
     // ---------------------------------------------------
     // START LOADING
     // ---------------------------------------------------
 
     setLoading(true);
 
-
     try {
 
       // =================================================
-      // MEMBER REGISTER API
+      // REGISTER MEMBER + LOGIN ACCOUNT
+      // Backend: POST /register
       // =================================================
 
       const response = await fetch(
-        `${API_URL}/member-register`,
+        `${API_URL}/register`,
         {
           method: "POST",
 
@@ -85,7 +81,6 @@ export default function Register() {
 
           body: JSON.stringify({
 
-            memberId: formData.memberId,
             memberName: formData.memberName,
             email: formData.email,
             phone: formData.phone,
@@ -93,11 +88,11 @@ export default function Register() {
             gender: formData.gender,
             plan: formData.plan,
             password: formData.password,
+            confirmPassword: formData.confirmPassword,
 
           }),
         }
       );
-
 
       // =================================================
       // RESPONSE
@@ -105,6 +100,7 @@ export default function Register() {
 
       const data = await response.json();
 
+      console.log("Register Response:", data);
 
       // =================================================
       // REGISTER FAILED
@@ -121,7 +117,6 @@ export default function Register() {
         return;
       }
 
-
       // =================================================
       // REGISTER SUCCESS
       // =================================================
@@ -132,13 +127,11 @@ export default function Register() {
         "Please login using your Email and Password."
       );
 
-
       // =================================================
       // CLEAR FORM
       // =================================================
 
       setFormData({
-        memberId: "",
         memberName: "",
         email: "",
         phone: "",
@@ -149,13 +142,11 @@ export default function Register() {
         confirmPassword: "",
       });
 
-
       // =================================================
       // GO TO LOGIN
       // =================================================
 
       navigate("/login");
-
 
     } catch (error) {
 
@@ -166,7 +157,7 @@ export default function Register() {
 
       alert(
         "Unable to connect to server.\n\n" +
-        "Please check your internet connection and try again."
+        "Please try again."
       );
 
     } finally {
@@ -177,7 +168,6 @@ export default function Register() {
 
   };
 
-
   // =====================================================
   // UI
   // =====================================================
@@ -185,7 +175,6 @@ export default function Register() {
   return (
 
     <div className="register-page">
-
 
       {/* =================================================
           HEADER
@@ -213,7 +202,6 @@ export default function Register() {
 
         </div>
 
-
         <a
           href="/"
           className="back-home"
@@ -223,7 +211,6 @@ export default function Register() {
 
       </header>
 
-
       {/* =================================================
           REGISTRATION SECTION
       ================================================= */}
@@ -231,7 +218,6 @@ export default function Register() {
       <section className="register-section">
 
         <div className="register-container">
-
 
           {/* =================================================
               LEFT SIDE
@@ -243,22 +229,16 @@ export default function Register() {
               START YOUR JOURNEY
             </p>
 
-
             <h1>
               JOIN <span>FITZONE</span>
             </h1>
 
-
             <p className="register-description">
-
               Create your membership account and start your
               fitness journey with FitZone Gym.
-
             </p>
 
-
             <div className="register-benefits">
-
 
               {/* MODERN EQUIPMENT */}
 
@@ -282,7 +262,6 @@ export default function Register() {
 
               </div>
 
-
               {/* EXPERT TRAINERS */}
 
               <div className="benefit">
@@ -304,7 +283,6 @@ export default function Register() {
                 </div>
 
               </div>
-
 
               {/* FLEXIBLE PLANS */}
 
@@ -328,18 +306,15 @@ export default function Register() {
 
               </div>
 
-
             </div>
 
           </div>
-
 
           {/* =================================================
               REGISTRATION CARD
           ================================================= */}
 
           <div className="register-card">
-
 
             {/* FORM HEADING */}
 
@@ -355,35 +330,11 @@ export default function Register() {
 
             </div>
 
-
             {/* =================================================
                 FORM
             ================================================= */}
 
             <form onSubmit={handleSubmit}>
-
-
-              {/* =================================================
-                  MEMBER ID
-              ================================================= */}
-
-              <div className="form-group">
-
-                <label>
-                  Member ID
-                </label>
-
-                <input
-                  type="number"
-                  name="memberId"
-                  value={formData.memberId}
-                  onChange={handleChange}
-                  placeholder="Enter Member ID"
-                  required
-                />
-
-              </div>
-
 
               {/* =================================================
                   FULL NAME
@@ -406,13 +357,11 @@ export default function Register() {
 
               </div>
 
-
               {/* =================================================
                   EMAIL + PHONE
               ================================================= */}
 
               <div className="form-row">
-
 
                 {/* EMAIL */}
 
@@ -433,7 +382,6 @@ export default function Register() {
 
                 </div>
 
-
                 {/* PHONE */}
 
                 <div className="form-group">
@@ -453,16 +401,13 @@ export default function Register() {
 
                 </div>
 
-
               </div>
-
 
               {/* =================================================
                   AGE + GENDER
               ================================================= */}
 
               <div className="form-row">
-
 
                 {/* AGE */}
 
@@ -484,7 +429,6 @@ export default function Register() {
                   />
 
                 </div>
-
 
                 {/* GENDER */}
 
@@ -521,9 +465,7 @@ export default function Register() {
 
                 </div>
 
-
               </div>
-
 
               {/* =================================================
                   MEMBERSHIP PLAN
@@ -566,13 +508,11 @@ export default function Register() {
 
               </div>
 
-
               {/* =================================================
                   PASSWORD + CONFIRM PASSWORD
               ================================================= */}
 
               <div className="form-row">
-
 
                 {/* PASSWORD */}
 
@@ -594,7 +534,6 @@ export default function Register() {
 
                 </div>
 
-
                 {/* CONFIRM PASSWORD */}
 
                 <div className="form-group">
@@ -615,9 +554,7 @@ export default function Register() {
 
                 </div>
 
-
               </div>
-
 
               {/* =================================================
                   TERMS
@@ -632,14 +569,11 @@ export default function Register() {
                 />
 
                 <label htmlFor="terms">
-
                   I agree to the FitZone membership
                   terms and conditions.
-
                 </label>
 
               </div>
-
 
               {/* =================================================
                   REGISTER BUTTON
@@ -664,9 +598,7 @@ export default function Register() {
 
               </button>
 
-
             </form>
-
 
             {/* =================================================
                 LOGIN LINK
@@ -682,13 +614,11 @@ export default function Register() {
 
             </p>
 
-
           </div>
 
         </div>
 
       </section>
-
 
       {/* =================================================
           FOOTER
@@ -701,7 +631,6 @@ export default function Register() {
         </p>
 
       </footer>
-
 
     </div>
 
