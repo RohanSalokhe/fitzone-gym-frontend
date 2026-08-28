@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
 
+const API_URL = "https://fitzone-gym-backend.onrender.com";
+
 export default function Dashboard() {
 
   // ===============================
@@ -24,12 +26,29 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-   fetch("https://fitzone-gym-backend.onrender.com/dashboard")
+    const adminId = localStorage.getItem("adminId");
+
+    if (!adminId) {
+      console.error("Admin ID not found. Please login again.");
+      setLoading(false);
+      return;
+    }
+
+    fetch(`${API_URL}/dashboard`, {
+      method: "GET",
+
+      headers: {
+        "Content-Type": "application/json",
+        "adminId": adminId
+      }
+    })
 
       .then((response) => {
 
         if (!response.ok) {
-          throw new Error("Failed to fetch dashboard data");
+          throw new Error(
+            `Failed to fetch dashboard data (${response.status})`
+          );
         }
 
         return response.json();
@@ -37,6 +56,8 @@ export default function Dashboard() {
       })
 
       .then((data) => {
+
+        console.log("Dashboard Response:", data);
 
         setDashboardData({
           totalMembers: data.totalMembers || 0,
@@ -315,7 +336,6 @@ export default function Dashboard() {
 
 
               <tbody>
-
 
                 <tr>
 
