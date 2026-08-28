@@ -1,37 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./payment.css";
 
 function Payment() {
 
-  const [payments, setPayments] = useState([
-    {
-      id: 1,
-      memberId: "M001",
-      memberName: "Rahul Patil",
-      amount: 2500,
-      paymentDate: "2026-08-20",
-      paymentMethod: "UPI",
-      paymentStatus: "Paid"
-    },
-    {
-      id: 2,
-      memberId: "M002",
-      memberName: "Amit Shinde",
-      amount: 4500,
-      paymentDate: "2026-08-21",
-      paymentMethod: "Cash",
-      paymentStatus: "Paid"
-    },
-    {
-      id: 3,
-      memberId: "M003",
-      memberName: "Sneha Jadhav",
-      amount: 1000,
-      paymentDate: "2026-08-22",
-      paymentMethod: "Card",
-      paymentStatus: "Pending"
-    }
-  ]);
+  const API_URL = "https://fitzone-gym-backend.onrender.com";
+
+  // =========================
+  // PAYMENTS
+  // =========================
+
+  const [payments, setPayments] = useState([]);
 
   const [showForm, setShowForm] = useState(false);
 
@@ -44,10 +22,45 @@ function Payment() {
     paymentStatus: ""
   });
 
+  // =========================
+  // GET PAYMENTS
+  // =========================
 
-  /* =========================
-     HANDLE INPUT
-  ========================= */
+  const fetchPayments = async () => {
+
+    try {
+
+      const response = await fetch(`${API_URL}/payments`);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch payments");
+      }
+
+      setPayments(data);
+
+    } catch (error) {
+
+      console.error("Fetch Payments Error:", error);
+
+    }
+
+  };
+
+  // =========================
+  // LOAD PAYMENTS
+  // =========================
+
+  useEffect(() => {
+
+    fetchPayments();
+
+  }, []);
+
+  // =========================
+  // HANDLE INPUT
+  // =========================
 
   const handleChange = (e) => {
 
@@ -58,75 +71,115 @@ function Payment() {
 
   };
 
+  // =========================
+  // ADD PAYMENT
+  // =========================
 
-  /* =========================
-     ADD PAYMENT
-  ========================= */
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    const newPayment = {
-      id: payments.length + 1,
-      ...formData,
-      amount: Number(formData.amount)
-    };
+    try {
 
-    setPayments([
-      ...payments,
-      newPayment
-    ]);
+      const response = await fetch(`${API_URL}/payments`, {
 
-    setFormData({
-      memberId: "",
-      memberName: "",
-      amount: "",
-      paymentDate: "",
-      paymentMethod: "",
-      paymentStatus: ""
-    });
+        method: "POST",
 
-    setShowForm(false);
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+          memberId: Number(formData.memberId),
+
+          amount: Number(formData.amount),
+
+          paymentDate: formData.paymentDate,
+
+          paymentMethod: formData.paymentMethod,
+
+          paymentStatus: formData.paymentStatus
+
+        })
+
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+
+        alert(data.message || data.error || "Payment failed");
+
+        return;
+
+      }
+
+      alert("Payment added successfully");
+
+      // Get latest payments from database
+      await fetchPayments();
+
+      // Clear form
+      setFormData({
+
+        memberId: "",
+        memberName: "",
+        amount: "",
+        paymentDate: "",
+        paymentMethod: "",
+        paymentStatus: ""
+
+      });
+
+      setShowForm(false);
+
+    } catch (error) {
+
+      console.error("Add Payment Error:", error);
+
+      alert("Server error. Please try again.");
+
+    }
 
   };
 
-
-  /* =========================
-     DELETE PAYMENT
-  ========================= */
-
-  const handleDelete = (id) => {
-
-    setPayments(
-      payments.filter(
-        (payment) => payment.id !== id
-      )
-    );
-
-  };
-
-
-  /* =========================
-     TOTAL AMOUNT
-  ========================= */
+  // =========================
+  // TOTAL AMOUNT
+  // =========================
 
   const totalAmount = payments.reduce(
+
     (total, payment) =>
-      total + Number(payment.amount),
+
+      total + Number(payment.amount || 0),
+
     0
+
   );
 
+  // =========================
+  // PAID PAYMENTS
+  // =========================
 
   const paidPayments = payments.filter(
+
     (payment) =>
+
       payment.paymentStatus === "Paid"
+
   ).length;
 
+  // =========================
+  // PENDING PAYMENTS
+  // =========================
 
   const pendingPayments = payments.filter(
+
     (payment) =>
+
       payment.paymentStatus === "Pending"
+
   ).length;
 
 
@@ -151,10 +204,15 @@ function Payment() {
         </div>
 
         <button
+
           className="add-payment-btn"
+
           onClick={() => setShowForm(true)}
+
         >
+
           + Add Payment
+
         </button>
 
       </div>
@@ -238,10 +296,15 @@ function Payment() {
             <h2>Add New Payment</h2>
 
             <button
+
               className="payment-close-btn"
+
               onClick={() => setShowForm(false)}
+
             >
+
               ×
+
             </button>
 
           </div>
@@ -250,6 +313,7 @@ function Payment() {
           <form onSubmit={handleSubmit}>
 
             <div className="payment-form-grid">
+
 
               {/* Member ID */}
 
@@ -260,12 +324,19 @@ function Payment() {
                 </label>
 
                 <input
-                  type="text"
+
+                  type="number"
+
                   name="memberId"
+
                   placeholder="Enter member ID"
+
                   value={formData.memberId}
+
                   onChange={handleChange}
+
                   required
+
                 />
 
               </div>
@@ -280,12 +351,19 @@ function Payment() {
                 </label>
 
                 <input
+
                   type="text"
+
                   name="memberName"
+
                   placeholder="Enter member name"
+
                   value={formData.memberName}
+
                   onChange={handleChange}
+
                   required
+
                 />
 
               </div>
@@ -300,12 +378,21 @@ function Payment() {
                 </label>
 
                 <input
+
                   type="number"
+
                   name="amount"
+
                   placeholder="Enter amount"
+
                   value={formData.amount}
+
                   onChange={handleChange}
+
                   required
+
+                  min="1"
+
                 />
 
               </div>
@@ -320,11 +407,17 @@ function Payment() {
                 </label>
 
                 <input
+
                   type="date"
+
                   name="paymentDate"
+
                   value={formData.paymentDate}
+
                   onChange={handleChange}
+
                   required
+
                 />
 
               </div>
@@ -339,10 +432,15 @@ function Payment() {
                 </label>
 
                 <select
+
                   name="paymentMethod"
+
                   value={formData.paymentMethod}
+
                   onChange={handleChange}
+
                   required
+
                 >
 
                   <option value="">
@@ -379,10 +477,15 @@ function Payment() {
                 </label>
 
                 <select
+
                   name="paymentStatus"
+
                   value={formData.paymentStatus}
+
                   onChange={handleChange}
+
                   required
+
                 >
 
                   <option value="">
@@ -409,18 +512,30 @@ function Payment() {
             <div className="payment-form-buttons">
 
               <button
+
                 type="button"
+
                 className="payment-cancel-btn"
+
                 onClick={() => setShowForm(false)}
+
               >
+
                 Cancel
+
               </button>
 
+
               <button
+
                 type="submit"
+
                 className="payment-save-btn"
+
               >
+
                 Save Payment
+
               </button>
 
             </div>
@@ -479,8 +594,6 @@ function Payment() {
 
                 <th>Status</th>
 
-                <th>Action</th>
-
               </tr>
 
             </thead>
@@ -488,114 +601,140 @@ function Payment() {
 
             <tbody>
 
-              {payments.map((payment) => (
+              {payments.length === 0 ? (
 
-                <tr key={payment.id}>
+                <tr>
 
-                  {/* ID */}
+                  <td
+                    colSpan="6"
+                    style={{
+                      textAlign: "center",
+                      padding: "30px"
+                    }}
+                  >
 
-                  <td>
-
-                    <span className="payment-id">
-                      #{payment.id}
-                    </span>
-
-                  </td>
-
-
-                  {/* MEMBER */}
-
-                  <td>
-
-                    <div className="payment-member">
-
-                      <div className="member-avatar">
-                        {payment.memberName.charAt(0)}
-                      </div>
-
-                      <div>
-
-                        <strong>
-                          {payment.memberName}
-                        </strong>
-
-                        <small>
-                          {payment.memberId}
-                        </small>
-
-                      </div>
-
-                    </div>
-
-                  </td>
-
-
-                  {/* AMOUNT */}
-
-                  <td>
-
-                    <strong className="payment-amount">
-                      ₹{payment.amount.toLocaleString("en-IN")}
-                    </strong>
-
-                  </td>
-
-
-                  {/* DATE */}
-
-                  <td>
-                    {payment.paymentDate}
-                  </td>
-
-
-                  {/* METHOD */}
-
-                  <td>
-
-                    <span className="payment-method">
-                      {payment.paymentMethod}
-                    </span>
-
-                  </td>
-
-
-                  {/* STATUS */}
-
-                  <td>
-
-                    <span
-                      className={
-                        payment.paymentStatus === "Paid"
-                          ? "status-paid"
-                          : "status-pending"
-                      }
-                    >
-
-                      {payment.paymentStatus}
-
-                    </span>
-
-                  </td>
-
-
-                  {/* ACTION */}
-
-                  <td>
-
-                    <button
-                      className="payment-delete-btn"
-                      onClick={() =>
-                        handleDelete(payment.id)
-                      }
-                    >
-                      🗑
-                    </button>
+                    No payments found
 
                   </td>
 
                 </tr>
 
-              ))}
+              ) : (
+
+                payments.map((payment, index) => (
+
+                  <tr
+                    key={`${payment.memberId}-${payment.paymentDate}-${payment.amount}-${index}`}
+                  >
+
+                    {/* ID */}
+
+                    <td>
+
+                      <span className="payment-id">
+
+                        #{index + 1}
+
+                      </span>
+
+                    </td>
+
+
+                    {/* MEMBER */}
+
+                    <td>
+
+                      <div className="payment-member">
+
+                        <div className="member-avatar">
+
+                          {payment.memberName
+                            ? payment.memberName.charAt(0).toUpperCase()
+                            : "M"}
+
+                        </div>
+
+                        <div>
+
+                          <strong>
+                            {payment.memberName || "Unknown Member"}
+                          </strong>
+
+                          <small>
+                            Member ID: {payment.memberId}
+                          </small>
+
+                        </div>
+
+                      </div>
+
+                    </td>
+
+
+                    {/* AMOUNT */}
+
+                    <td>
+
+                      <strong className="payment-amount">
+
+                        ₹{Number(payment.amount || 0).toLocaleString("en-IN")}
+
+                      </strong>
+
+                    </td>
+
+
+                    {/* DATE */}
+
+                    <td>
+
+                      {payment.paymentDate
+                        ? new Date(payment.paymentDate)
+                            .toISOString()
+                            .split("T")[0]
+                        : "-"}
+
+                    </td>
+
+
+                    {/* METHOD */}
+
+                    <td>
+
+                      <span className="payment-method">
+
+                        {payment.paymentMethod || "-"}
+
+                      </span>
+
+                    </td>
+
+
+                    {/* STATUS */}
+
+                    <td>
+
+                      <span
+
+                        className={
+                          payment.paymentStatus === "Paid"
+                            ? "status-paid"
+                            : "status-pending"
+                        }
+
+                      >
+
+                        {payment.paymentStatus || "Pending"}
+
+                      </span>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
 
             </tbody>
 
@@ -608,6 +747,7 @@ function Payment() {
     </div>
 
   );
+
 }
 
 export default Payment;

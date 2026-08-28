@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./member.css";
 
-const API_URL = "http://localhost:5005";
+const API_URL = "https://fitzone-gym-backend.onrender.com";
 
 export default function Member() {
   const [members, setMembers] = useState([]);

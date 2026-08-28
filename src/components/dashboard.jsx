@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-    fetch("http://localhost:5005/dashboard")
+   fetch("https://fitzone-gym-backend.onrender.com/dashboard")
 
       .then((response) => {
 
