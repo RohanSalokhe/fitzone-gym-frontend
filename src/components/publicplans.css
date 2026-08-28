@@ -1,0 +1,411 @@
+/* =====================================================
+   FITZONE PUBLIC PLANS
+===================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.public-plans-page {
+  min-height: 100vh;
+  background: #080808;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.public-plans-header {
+  height: 82px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #090909;
+  border-bottom: 1px solid #292929;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.public-logo {
+  color: #ffffff;
+  text-decoration: none;
+
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.public-logo span {
+  color: #ff6600;
+}
+
+.public-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.public-nav-buttons a {
+  text-decoration: none;
+  font-weight: 700;
+  padding: 12px 22px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.home-btn {
+  color: #ffffff;
+}
+
+.home-btn:hover {
+  color: #ff6600;
+}
+
+.login-btn {
+  color: #ffffff;
+  border: 1px solid #ff6600;
+}
+
+.login-btn:hover {
+  background: #ff6600;
+}
+
+.register-btn {
+  background: #ff6600;
+  color: #ffffff;
+}
+
+.register-btn:hover {
+  background: #e85b00;
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.plans-hero {
+  text-align: center;
+  padding: 80px 20px 55px;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.88),
+      rgba(0, 0, 0, 0.95)
+    );
+}
+
+.plans-small-title {
+  color: #ff6600;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  margin-bottom: 15px;
+}
+
+.plans-hero h1 {
+  font-size: 52px;
+  font-weight: 900;
+  margin-bottom: 18px;
+}
+
+.plans-hero h1 span {
+  color: #ff6600;
+}
+
+.plans-description {
+  max-width: 650px;
+  margin: auto;
+  color: #bdbdbd;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+
+/* =====================================================
+   PLANS SECTION
+===================================================== */
+
+.public-plans-section {
+  width: 100%;
+  padding: 35px 7% 80px;
+}
+
+.plans-grid {
+  max-width: 1250px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+
+/* =====================================================
+   PLAN CARD
+===================================================== */
+
+.public-plan-card {
+  position: relative;
+
+  background: #111111;
+  border: 1px solid #292929;
+  border-radius: 14px;
+
+  padding: 35px 25px;
+
+  text-align: center;
+
+  transition: 0.3s;
+}
+
+.public-plan-card:hover {
+  transform: translateY(-8px);
+  border-color: #ff6600;
+  box-shadow: 0 15px 35px rgba(255, 102, 0, 0.15);
+}
+
+.popular-plan {
+  border: 2px solid #ff6600;
+}
+
+.popular-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: #ff6600;
+  color: #ffffff;
+
+  padding: 7px 18px;
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+}
+
+.plan-icon {
+  width: 62px;
+  height: 62px;
+
+  margin: 5px auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #1c1c1c;
+  border-radius: 50%;
+
+  font-size: 27px;
+}
+
+.public-plan-card h2 {
+  font-size: 23px;
+  margin-bottom: 15px;
+}
+
+.plan-price {
+  color: #ff6600;
+  font-size: 38px;
+  font-weight: 900;
+}
+
+.plan-duration {
+  color: #888888;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.plan-divider {
+  height: 1px;
+  background: #292929;
+  margin: 25px 0;
+}
+
+.public-plan-card ul {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.public-plan-card li {
+  color: #d1d1d1;
+  font-size: 14px;
+  padding: 9px 0;
+
+  display: flex;
+  gap: 10px;
+}
+
+.public-plan-card li span {
+  color: #ff6600;
+  font-weight: bold;
+}
+
+.choose-plan-btn {
+  display: block;
+
+  width: 100%;
+  padding: 13px;
+
+  border: 1px solid #ff6600;
+  border-radius: 7px;
+
+  color: #ffffff;
+  text-decoration: none;
+
+  font-weight: 800;
+  font-size: 14px;
+
+  transition: 0.3s;
+}
+
+.choose-plan-btn:hover {
+  background: #ff6600;
+}
+
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.plans-cta {
+  text-align: center;
+
+  padding: 65px 20px;
+
+  background: #101010;
+  border-top: 1px solid #242424;
+  border-bottom: 1px solid #242424;
+}
+
+.plans-cta h2 {
+  font-size: 30px;
+  margin-bottom: 14px;
+}
+
+.plans-cta p {
+  color: #999999;
+  margin-bottom: 25px;
+}
+
+.cta-register-btn {
+  display: inline-block;
+
+  padding: 14px 30px;
+
+  background: #ff6600;
+  color: #ffffff;
+
+  border-radius: 7px;
+
+  text-decoration: none;
+  font-weight: 800;
+
+  transition: 0.3s;
+}
+
+.cta-register-btn:hover {
+  background: #e85b00;
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.public-plans-footer {
+  padding: 30px 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #070707;
+}
+
+.footer-logo {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.footer-logo span {
+  color: #ff6600;
+}
+
+.public-plans-footer p {
+  color: #777777;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .plans-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .public-plans-header {
+    padding: 0 20px;
+  }
+
+  .public-logo {
+    font-size: 24px;
+  }
+
+  .home-btn {
+    display: none;
+  }
+
+  .public-nav-buttons a {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .plans-hero {
+    padding: 60px 20px 40px;
+  }
+
+  .plans-hero h1 {
+    font-size: 36px;
+  }
+
+  .plans-description {
+    font-size: 15px;
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-plans-footer {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+}

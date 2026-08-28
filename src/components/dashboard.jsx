@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
@@ -6,9 +7,9 @@ const API_URL = "https://fitzone-gym-backend.onrender.com";
 
 export default function Dashboard() {
 
-  // ===============================
-  // DASHBOARD API DATA
-  // ===============================
+  // ==========================================
+  // DASHBOARD DATA
+  // ==========================================
 
   const [dashboardData, setDashboardData] = useState({
     totalMembers: 0,
@@ -17,75 +18,210 @@ export default function Dashboard() {
     totalAmount: 0
   });
 
+  const [members, setMembers] = useState([]);
+  const [planCounts, setPlanCounts] = useState({
+    "1 Month": 0,
+    "3 Months": 0,
+    "6 Months": 0,
+    "12 Months": 0
+  });
+
   const [loading, setLoading] = useState(true);
 
 
-  // ===============================
+  // ==========================================
   // FETCH DASHBOARD DATA
-  // ===============================
+  // ==========================================
 
-  useEffect(() => {
+  const fetchDashboard = async () => {
 
-    const adminId = localStorage.getItem("adminId");
+    try {
 
-    if (!adminId) {
-      console.error("Admin ID not found. Please login again.");
+      setLoading(true);
+
+      const response = await fetch(`${API_URL}/dashboard`, {
+        method: "GET",
+        headers: {
+          "Authorization": "admin"
+        }
+      });
+
+      const data = await response.json();
+
+      console.log("Dashboard Response:", data);
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          data.error ||
+          `Dashboard error (${response.status})`
+        );
+      }
+
+      setDashboardData({
+        totalMembers: Number(data.totalMembers) || 0,
+        totalPlans: Number(data.totalPlans) || 0,
+        totalPayments: Number(data.totalPayments) || 0,
+        totalAmount: Number(data.totalAmount) || 0
+      });
+
+    } catch (error) {
+
+      console.error("Dashboard API Error:", error);
+
+    } finally {
+
       setLoading(false);
-      return;
+
     }
 
-    fetch(`${API_URL}/dashboard`, {
-      method: "GET",
+  };
 
-      headers: {
-        "Content-Type": "application/json",
-        "adminId": adminId
-      }
-    })
 
-      .then((response) => {
+  // ==========================================
+  // FETCH MEMBERS
+  // ==========================================
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch dashboard data (${response.status})`
-          );
+  const fetchMembers = async () => {
+
+    try {
+
+      const response = await fetch(`${API_URL}/members`, {
+        method: "GET",
+        headers: {
+          "Authorization": "admin"
         }
+      });
 
-        return response.json();
+      const data = await response.json();
 
-      })
+      console.log("Members Response:", data);
 
-      .then((data) => {
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          data.error ||
+          `Members error (${response.status})`
+        );
+      }
 
-        console.log("Dashboard Response:", data);
+      const memberList = Array.isArray(data)
+        ? data
+        : data.members || [];
 
-        setDashboardData({
-          totalMembers: data.totalMembers || 0,
-          totalPlans: data.totalPlans || 0,
-          totalPayments: data.totalPayments || 0,
-          totalAmount: data.totalAmount || 0
-        });
+      setMembers(memberList);
 
-        setLoading(false);
 
-      })
+      // ==========================================
+      // PLAN COUNTS
+      // ==========================================
 
-      .catch((error) => {
+      const counts = {
+        "1 Month": 0,
+        "3 Months": 0,
+        "6 Months": 0,
+        "12 Months": 0
+      };
 
-        console.error("Dashboard API Error:", error);
+      memberList.forEach((member) => {
 
-        setLoading(false);
+        if (counts.hasOwnProperty(member.plan)) {
+          counts[member.plan]++;
+        }
 
       });
 
+      setPlanCounts(counts);
+
+    } catch (error) {
+
+      console.error("Members API Error:", error);
+
+    }
+
+  };
+
+
+  // ==========================================
+  // LOAD DATA
+  // ==========================================
+
+  useEffect(() => {
+
+    fetchDashboard();
+    fetchMembers();
+
   }, []);
+
+
+  // ==========================================
+  // PLAN PROGRESS
+  // ==========================================
+
+  const maxPlanCount = Math.max(
+    ...Object.values(planCounts),
+    1
+  );
+
+  const getProgress = (count) => {
+
+    return `${Math.round(
+      (count / maxPlanCount) * 100
+    )}%`;
+
+  };
+
+
+  // ==========================================
+  // GET INITIALS
+  // ==========================================
+
+  const getInitials = (name) => {
+
+    if (!name) return "M";
+
+    return name
+      .split(" ")
+      .map((word) => word.charAt(0))
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+
+  };
+
+
+  // ==========================================
+  // FORMAT DATE
+  // ==========================================
+
+  const formatDate = (date) => {
+
+    if (!date) {
+      return "N/A";
+    }
+
+    const d = new Date(date);
+
+    if (isNaN(d.getTime())) {
+      return "N/A";
+    }
+
+    return d.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+
+  };
 
 
   return (
 
     <>
 
-      {/* ================= HEADER ================= */}
+      {/* =======================================
+          HEADER
+      ======================================== */}
 
       <header className="dashboard-header">
 
@@ -137,7 +273,9 @@ export default function Dashboard() {
       </header>
 
 
-      {/* ================= STATISTICS ================= */}
+      {/* =======================================
+          STATISTICS
+      ======================================== */}
 
       <section className="stats-grid">
 
@@ -173,7 +311,7 @@ export default function Dashboard() {
         </div>
 
 
-        {/* TOTAL PAYMENT AMOUNT */}
+        {/* TOTAL PAYMENT */}
 
         <div className="stat-card">
 
@@ -192,9 +330,7 @@ export default function Dashboard() {
               ₹
               {loading
                 ? "..."
-                : Number(
-                    dashboardData.totalAmount
-                  ).toLocaleString("en-IN")}
+                : dashboardData.totalAmount.toLocaleString("en-IN")}
 
             </h2>
 
@@ -275,12 +411,16 @@ export default function Dashboard() {
       </section>
 
 
-      {/* ================= DASHBOARD GRID ================= */}
+      {/* =======================================
+          DASHBOARD GRID
+      ======================================== */}
 
       <section className="dashboard-grid">
 
 
-        {/* ================= RECENT MEMBERS ================= */}
+        {/* =====================================
+            RECENT MEMBERS
+        ====================================== */}
 
         <div className="dashboard-card recent-members">
 
@@ -323,7 +463,7 @@ export default function Dashboard() {
                   </th>
 
                   <th>
-                    Join Date
+                    Member ID
                   </th>
 
                   <th>
@@ -337,145 +477,70 @@ export default function Dashboard() {
 
               <tbody>
 
-                <tr>
+                {members.length === 0 ? (
 
-                  <td>
+                  <tr>
 
-                    <div className="member-name">
+                    <td
+                      colSpan="4"
+                      style={{
+                        textAlign: "center",
+                        padding: "30px"
+                      }}
+                    >
+                      No members found
+                    </td>
 
-                      <span>
-                        AS
-                      </span>
+                  </tr>
 
-                      Amit Sharma
+                ) : (
 
-                    </div>
+                  members
+                    .slice(0, 4)
+                    .map((member) => (
 
-                  </td>
+                      <tr key={member.memberId}>
 
-                  <td>
-                    6 Months
-                  </td>
+                        <td>
 
-                  <td>
-                    20 Aug 2026
-                  </td>
+                          <div className="member-name">
 
-                  <td>
+                            <span>
+                              {getInitials(
+                                member.memberName
+                              )}
+                            </span>
 
-                    <span className="status active-status">
-                      Active
-                    </span>
+                            {member.memberName}
 
-                  </td>
+                          </div>
 
-                </tr>
-
-
-                <tr>
-
-                  <td>
-
-                    <div className="member-name">
-
-                      <span>
-                        PS
-                      </span>
-
-                      Priya Shah
-
-                    </div>
-
-                  </td>
-
-                  <td>
-                    12 Months
-                  </td>
-
-                  <td>
-                    19 Aug 2026
-                  </td>
-
-                  <td>
-
-                    <span className="status active-status">
-                      Active
-                    </span>
-
-                  </td>
-
-                </tr>
+                        </td>
 
 
-                <tr>
-
-                  <td>
-
-                    <div className="member-name">
-
-                      <span>
-                        RK
-                      </span>
-
-                      Rahul Kumar
-
-                    </div>
-
-                  </td>
-
-                  <td>
-                    3 Months
-                  </td>
-
-                  <td>
-                    18 Aug 2026
-                  </td>
-
-                  <td>
-
-                    <span className="status active-status">
-                      Active
-                    </span>
-
-                  </td>
-
-                </tr>
+                        <td>
+                          {member.plan || "N/A"}
+                        </td>
 
 
-                <tr>
+                        <td>
+                          {member.memberId}
+                        </td>
 
-                  <td>
 
-                    <div className="member-name">
+                        <td>
 
-                      <span>
-                        SN
-                      </span>
+                          <span className="status active-status">
+                            Active
+                          </span>
 
-                      Sneha Patil
+                        </td>
 
-                    </div>
+                      </tr>
 
-                  </td>
+                    ))
 
-                  <td>
-                    1 Month
-                  </td>
-
-                  <td>
-                    17 Aug 2026
-                  </td>
-
-                  <td>
-
-                    <span className="status pending-status">
-                      Pending
-                    </span>
-
-                  </td>
-
-                </tr>
-
+                )}
 
               </tbody>
 
@@ -486,7 +551,9 @@ export default function Dashboard() {
         </div>
 
 
-        {/* ================= MEMBERSHIP OVERVIEW ================= */}
+        {/* =====================================
+            MEMBERSHIP OVERVIEW
+        ====================================== */}
 
         <div className="dashboard-card membership-overview">
 
@@ -518,7 +585,7 @@ export default function Dashboard() {
               </span>
 
               <strong>
-                20
+                {planCounts["1 Month"]}
               </strong>
 
             </div>
@@ -528,7 +595,9 @@ export default function Dashboard() {
               <div
                 className="progress-bar"
                 style={{
-                  width: "25%"
+                  width: getProgress(
+                    planCounts["1 Month"]
+                  )
                 }}
               />
 
@@ -548,7 +617,7 @@ export default function Dashboard() {
               </span>
 
               <strong>
-                35
+                {planCounts["3 Months"]}
               </strong>
 
             </div>
@@ -558,7 +627,9 @@ export default function Dashboard() {
               <div
                 className="progress-bar"
                 style={{
-                  width: "45%"
+                  width: getProgress(
+                    planCounts["3 Months"]
+                  )
                 }}
               />
 
@@ -578,7 +649,7 @@ export default function Dashboard() {
               </span>
 
               <strong>
-                45
+                {planCounts["6 Months"]}
               </strong>
 
             </div>
@@ -588,7 +659,9 @@ export default function Dashboard() {
               <div
                 className="progress-bar"
                 style={{
-                  width: "65%"
+                  width: getProgress(
+                    planCounts["6 Months"]
+                  )
                 }}
               />
 
@@ -608,7 +681,7 @@ export default function Dashboard() {
               </span>
 
               <strong>
-                50
+                {planCounts["12 Months"]}
               </strong>
 
             </div>
@@ -618,7 +691,9 @@ export default function Dashboard() {
               <div
                 className="progress-bar"
                 style={{
-                  width: "80%"
+                  width: getProgress(
+                    planCounts["12 Months"]
+                  )
                 }}
               />
 
@@ -631,7 +706,9 @@ export default function Dashboard() {
       </section>
 
 
-      {/* ================= QUICK ACTIONS ================= */}
+      {/* =======================================
+          QUICK ACTIONS
+      ======================================== */}
 
       <section className="quick-section">
 

@@ -4,7 +4,6 @@ import "./member.css";
 const API_URL = "https://fitzone-gym-backend.onrender.com";
 
 export default function Member() {
-
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -16,244 +15,220 @@ export default function Member() {
     plan: "",
   });
 
-
   // ==========================================
   // GET ALL MEMBERS
   // ==========================================
 
   const fetchMembers = async () => {
-
     try {
-
       setLoading(true);
-
-      const adminId = localStorage.getItem("adminId");
-
-      if (!adminId) {
-        alert("Admin session not found. Please login again.");
-        return;
-      }
 
       const response = await fetch(`${API_URL}/members`, {
         method: "GET",
-
         headers: {
           "Content-Type": "application/json",
-          "adminId": adminId,
+          Authorization: "admin",
         },
       });
 
-      const data = await response.json();
+      const text = await response.text();
 
-      console.log("Members Response:", data);
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = {
+          message: text,
+        };
+      }
+
+      console.log("GET Members Status:", response.status);
+      console.log("GET Members Response:", data);
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Failed to fetch members"
+          data.message ||
+            data.error ||
+            `Failed to fetch members (${response.status})`
         );
       }
 
-      setMembers(Array.isArray(data) ? data : []);
-
+      setMembers(
+        Array.isArray(data)
+          ? data
+          : data.members || []
+      );
     } catch (error) {
-
       console.error("Fetch Members Error:", error);
 
       alert(
-        error.message || "Unable to load members"
+        `Unable to load members.\n\n${error.message}`
       );
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-
   // ==========================================
-  // LOAD MEMBERS WHEN PAGE OPENS
+  // LOAD MEMBERS
   // ==========================================
 
   useEffect(() => {
-
     fetchMembers();
-
   }, []);
-
 
   // ==========================================
   // HANDLE INPUT
   // ==========================================
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
 
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-
   };
-
 
   // ==========================================
   // ADD MEMBER
   // ==========================================
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
 
     // ==========================================
     // VALIDATION
     // ==========================================
 
     if (
-      !formData.memberName ||
-      !formData.phone ||
+      !formData.memberName.trim() ||
+      !formData.phone.trim() ||
       !formData.age ||
       !formData.gender ||
       !formData.plan
     ) {
-
-      alert("Please fill all fields");
-
+      alert("Please fill all fields.");
       return;
-
     }
 
-
     try {
-
-      const adminId = localStorage.getItem("adminId");
-
-
-      // ==========================================
-      // CHECK ADMIN LOGIN
-      // ==========================================
-
-      if (!adminId) {
-
-        alert(
-          "Admin session not found. Please login again."
-        );
-
-        return;
-
-      }
-
-
       // ==========================================
       // POST MEMBER
       // ==========================================
 
-      const response = await fetch(`${API_URL}/members`, {
+      const response = await fetch(
+        `${API_URL}/members`,
+        {
+          method: "POST",
 
-        method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "admin",
+          },
 
-        headers: {
+          body: JSON.stringify({
+            memberName:
+              formData.memberName.trim(),
 
-          "Content-Type": "application/json",
+            phone:
+              formData.phone.trim(),
 
-          "adminId": adminId,
+            age:
+              Number(formData.age),
 
-        },
+            gender:
+              formData.gender,
 
-        body: JSON.stringify({
+            plan:
+              formData.plan,
+          }),
+        }
+      );
 
-          memberName: formData.memberName,
+      // ==========================================
+      // READ RESPONSE
+      // ==========================================
 
-          phone: formData.phone,
+      const text = await response.text();
 
-          age: Number(formData.age),
+      let data;
 
-          gender: formData.gender,
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = {
+          message: text,
+        };
+      }
 
-          plan: formData.plan,
+      console.log(
+        "POST Members Status:",
+        response.status
+      );
 
-        }),
-
-      });
-
-
-      const data = await response.json();
-
-
-      console.log("Add Member Response:", data);
-
+      console.log(
+        "POST Members Response:",
+        data
+      );
 
       // ==========================================
       // ERROR
       // ==========================================
 
       if (!response.ok) {
-
         alert(
           data.message ||
-          data.error ||
-          "Failed to add member"
+            data.error ||
+            `Failed to add member (${response.status})`
         );
 
         return;
-
       }
-
 
       // ==========================================
       // SUCCESS
       // ==========================================
 
       alert(
-        `Member added successfully!\n\nMember ID: ${data.memberId || "Generated"}`
+        "Member added successfully!" +
+          (data.memberId
+            ? `\n\nMember ID: ${data.memberId}`
+            : "")
       );
-
 
       // ==========================================
       // CLEAR FORM
       // ==========================================
 
       setFormData({
-
         memberName: "",
         phone: "",
         age: "",
         gender: "",
         plan: "",
-
       });
-
 
       // ==========================================
       // REFRESH MEMBERS
       // ==========================================
 
-      fetchMembers();
-
-
+      await fetchMembers();
     } catch (error) {
-
       console.error(
         "Add Member Error:",
         error
       );
 
       alert(
-        "Unable to connect to the server. Please try again."
+        `Unable to connect to the server.\n\nError: ${error.message}`
       );
-
     }
-
   };
 
-
   return (
-
     <div className="member-page">
-
 
       {/* =====================================
           HEADER
@@ -262,17 +237,12 @@ export default function Member() {
       <div className="member-header">
 
         <div>
-
-          <h1>
-            Members
-          </h1>
+          <h1>Members</h1>
 
           <p>
             Manage your gym members
           </p>
-
         </div>
-
 
         <div className="member-count">
 
@@ -288,7 +258,6 @@ export default function Member() {
 
       </div>
 
-
       {/* =====================================
           ADD MEMBER FORM
       ====================================== */}
@@ -299,11 +268,9 @@ export default function Member() {
           Add New Member
         </h2>
 
-
         <form onSubmit={handleSubmit}>
 
           <div className="form-grid">
-
 
             {/* MEMBER NAME */}
 
@@ -316,14 +283,15 @@ export default function Member() {
               <input
                 type="text"
                 name="memberName"
-                value={formData.memberName}
+                value={
+                  formData.memberName
+                }
                 onChange={handleChange}
                 placeholder="Enter member name"
                 required
               />
 
             </div>
-
 
             {/* MOBILE NUMBER */}
 
@@ -336,7 +304,9 @@ export default function Member() {
               <input
                 type="tel"
                 name="phone"
-                value={formData.phone}
+                value={
+                  formData.phone
+                }
                 onChange={handleChange}
                 placeholder="Enter mobile number"
                 maxLength="10"
@@ -344,7 +314,6 @@ export default function Member() {
               />
 
             </div>
-
 
             {/* AGE */}
 
@@ -357,7 +326,9 @@ export default function Member() {
               <input
                 type="number"
                 name="age"
-                value={formData.age}
+                value={
+                  formData.age
+                }
                 onChange={handleChange}
                 placeholder="Enter age"
                 min="10"
@@ -366,7 +337,6 @@ export default function Member() {
               />
 
             </div>
-
 
             {/* GENDER */}
 
@@ -378,7 +348,9 @@ export default function Member() {
 
               <select
                 name="gender"
-                value={formData.gender}
+                value={
+                  formData.gender
+                }
                 onChange={handleChange}
                 required
               >
@@ -403,7 +375,6 @@ export default function Member() {
 
             </div>
 
-
             {/* MEMBERSHIP PLAN */}
 
             <div className="form-group">
@@ -414,7 +385,9 @@ export default function Member() {
 
               <select
                 name="plan"
-                value={formData.plan}
+                value={
+                  formData.plan
+                }
                 onChange={handleChange}
                 required
               >
@@ -445,29 +418,24 @@ export default function Member() {
 
           </div>
 
-
           {/* ADD BUTTON */}
 
           <button
             type="submit"
             className="add-member-btn"
           >
-
             + Add Member
-
           </button>
 
         </form>
 
       </div>
 
-
       {/* =====================================
           ALL MEMBERS
       ====================================== */}
 
       <div className="members-table-card">
-
 
         <div className="table-header">
 
@@ -483,18 +451,14 @@ export default function Member() {
 
           </div>
 
-
           <button
             className="refresh-btn"
             onClick={fetchMembers}
           >
-
             ↻ Refresh
-
           </button>
 
         </div>
-
 
         {/* LOADING */}
 
@@ -504,11 +468,7 @@ export default function Member() {
             Loading members...
           </div>
 
-
         ) : members.length === 0 ? (
-
-
-          /* NO MEMBERS */
 
           <div className="no-members">
 
@@ -526,11 +486,7 @@ export default function Member() {
 
           </div>
 
-
         ) : (
-
-
-          /* MEMBERS TABLE */
 
           <div className="table-wrapper">
 
@@ -568,63 +524,49 @@ export default function Member() {
 
               </thead>
 
-
               <tbody>
 
-                {members.map((member) => (
+                {members.map(
+                  (member) => (
 
-                  <tr
-                    key={member.memberId}
-                  >
+                    <tr
+                      key={
+                        member.memberId
+                      }
+                    >
 
-                    <td className="member-id">
+                      <td className="member-id">
+                        {member.memberId}
+                      </td>
 
-                      {member.memberId}
+                      <td className="member-name">
+                        {member.memberName}
+                      </td>
 
-                    </td>
+                      <td>
+                        {member.phone}
+                      </td>
 
+                      <td>
+                        {member.age}
+                      </td>
 
-                    <td className="member-name">
+                      <td>
+                        {member.gender}
+                      </td>
 
-                      {member.memberName}
+                      <td>
 
-                    </td>
+                        <span className="plan-badge">
+                          {member.plan}
+                        </span>
 
+                      </td>
 
-                    <td>
+                    </tr>
 
-                      {member.phone}
-
-                    </td>
-
-
-                    <td>
-
-                      {member.age}
-
-                    </td>
-
-
-                    <td>
-
-                      {member.gender}
-
-                    </td>
-
-
-                    <td>
-
-                      <span className="plan-badge">
-
-                        {member.plan}
-
-                      </span>
-
-                    </td>
-
-                  </tr>
-
-                ))}
+                  )
+                )}
 
               </tbody>
 
@@ -637,7 +579,5 @@ export default function Member() {
       </div>
 
     </div>
-
   );
-
 }
