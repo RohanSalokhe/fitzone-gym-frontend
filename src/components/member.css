@@ -226,8 +226,23 @@
 
 .table-wrapper {
   width: 100%;
+
+  /* IMPORTANT:
+     5 members visible at a time */
+  height: 260px;
+
+  /* Vertical scrolling inside table */
+  overflow-y: auto;
+
+  /* Keep horizontal scrolling */
   overflow-x: auto;
+
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
 }
+
+
+/* Table */
 
 .table-wrapper table {
   width: 100%;
@@ -235,7 +250,12 @@
   min-width: 1200px;
 }
 
-.table-wrapper th {
+
+/* ================================
+   TABLE HEADER
+================================ */
+
+.table-wrapper thead th {
   background: #171717;
   color: #ff6a00;
   text-align: left;
@@ -244,7 +264,17 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
+
+  /* Header stays visible while scrolling */
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
+
+
+/* ================================
+   TABLE DATA
+================================ */
 
 .table-wrapper td {
   padding: 14px 12px;
@@ -265,6 +295,37 @@
 .member-name {
   color: #ffffff !important;
   font-weight: 700;
+}
+
+
+/* ================================
+   TABLE SCROLLBAR
+================================ */
+
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #0b0b0b;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #ff6a00;
+  border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #ff7b1a;
+}
+
+
+/* Firefox scrollbar */
+
+.table-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #ff6a00 #0b0b0b;
 }
 
 
@@ -346,6 +407,7 @@
   }
 }
 
+
 @media (max-width: 700px) {
   .member-page {
     padding: 18px;
@@ -375,5 +437,10 @@
 
   .table-header {
     padding: 18px;
+  }
+
+  /* Mobile table scroll */
+  .table-wrapper {
+    height: 260px;
   }
 }
