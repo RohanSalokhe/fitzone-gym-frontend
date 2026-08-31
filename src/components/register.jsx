@@ -47,6 +47,24 @@ export default function Register() {
     e.preventDefault();
 
     // ---------------------------------------------------
+    // NAME VALIDATION
+    // ---------------------------------------------------
+
+    if (!/^[A-Za-z ]+$/.test(formData.memberName.trim())) {
+      alert("Name should contain only letters.");
+      return;
+    }
+
+    // ---------------------------------------------------
+    // MOBILE NUMBER VALIDATION
+    // ---------------------------------------------------
+
+    if (!/^[0-9]{10}$/.test(formData.phone)) {
+      alert("Mobile number must be exactly 10 digits.");
+      return;
+    }
+
+    // ---------------------------------------------------
     // PASSWORD CHECK
     // ---------------------------------------------------
 
@@ -396,6 +414,8 @@ export default function Register() {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Enter mobile number"
+                    maxLength="10"
+                    inputMode="numeric"
                     required
                   />
 
